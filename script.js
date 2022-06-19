@@ -9,32 +9,52 @@ const forecast = document.getElementById('forecast-weather');
 
 const apikey = `769117f746b254c905cc5ead9f1384d5`;
 
+//LISTENER FOR SEARCH BUTTON
 btnsearch.addEventListener("click", function(e){
-    clearsection();
-    getweather();
+    clearsection(e);
+    getweather(e);
     
 });
 
 input.addEventListener("keypress", function(e) {
     if(e.key === "Enter") {
-        clearsection();
-        getweather();
+        clearsection(e);
+        getweather(e);
         
     }
 });
 
-btncompare.addEventListener("click", function(){
-    getweather();
+//LISTENER FOR COMPARE BUTTON
+btncompare.addEventListener("click", function(e){
+    clearsection(e);
+    getweather(e);
+    
 });
 
+//FUNCTION
 function dayoftheweek(element, data){
     new Date(element.dt*1000-(data.timezone_offset*1000)).getDay()
     return days[new Date(element.dt*1000-(data.timezone_offset*1000)).getDay()];
 }
 
-function forecastcards(element, data){
+function creatforecastarticles (data, e) {
+    let forecastedcity = document.createElement('div');
+    forecastedcity.setAttribute(`id`,`forecastedcity-${e.target.id}`);
+    forecastedcity.setAttribute(`class`,`forecast-weather-article`);
+    forecastedcity.classList.add(`${input.value}`);
+    forecast.appendChild(forecastedcity);
 
-    let forecastedcity = document.getElementById(`forecastedcity-${input.value}`);
+    for (let [index, element] of data.daily.entries()) {
+        if (index > 0 && index <= 5) {
+            console.log(index, element);
+            forecastcards(element, data, e);
+        }
+    }
+}
+
+function forecastcards(element, data, e){
+
+    let forecastedcity = document.getElementById(`forecastedcity-${e.target.id}`);
 
     let card = document.createElement('article');
     card.classList.add(`${input.value}`);
@@ -63,11 +83,12 @@ function forecastcards(element, data){
     card.appendChild(carddescription);
 }
 
-function currentcardpart1(data){ // use first data
+function currentcardpart1(data, e){ // use first data
     
     let currentweather = document.createElement('article');
-    currentweather.setAttribute(`id`,`currentweather-${input.value}`);
+    currentweather.setAttribute(`id`,`currentweather-${e.target.id}`);
     currentweather.setAttribute(`class`,`current-weather-article`);
+    currentweather.classList.add(`${input.value}`);
 
     let cityname = document.createElement('h2');
     cityname.innerHTML = `${data[0].name}`;
@@ -80,9 +101,9 @@ function currentcardpart1(data){ // use first data
     currentweather.appendChild(countryandstate);
 }
 
-function currentcardpart2(data){ //use second data
+function currentcardpart2(data,e){ //use second data
     
-    let currentweather = document.getElementById(`currentweather-${input.value}`);
+    let currentweather = document.getElementById(`currentweather-${e.target.id}`);
     
     let logo = document.createElement('img');
     logo.setAttribute('src', `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`);
@@ -100,52 +121,46 @@ function currentcardpart2(data){ //use second data
 }
 
 /* function clearsection(e){
+    const currentdelete = document.getElementById(`currentweather-${e.target.id}`);
+    const forecastdelete = document.getElementById(`forecastedcity-${e.target.id}`);
 
-    if (e.target.id === "btn-search"){
-        while(current.children.length > 1) {
-            current.removeChild(current.lastChild);
-        }
+    if (document.body.contains(currentdelete)) {
+        console.log(`yes ${currentdelete} exist in the DOM anbd it will be deleted`);
+        currentdelete.remove();
+        } 
 
-        while(forecast.children.length > 1) {
-            forecast.removeChild(forecast.lastChild);
-        }
-    }
-
-    if (e.target.id === "btn-compare"){
-
-        while(current.children.length > 1) {
-            current.removeChild(current.firstChild);
-        }
-        while(forecast.children.length > 1) {
-            forecast.removeChild(forecast.firstChild);
-        }
+    if (document.body.contains(forecastdelete)) {
+        console.log(`yes ${forecastdelete} exist in the DOM anbd it will be deleted`);
+        forecastdelete.remove();
     }
 } */
 
-function clearsection(){
+function clearsection(e){
+    const currentdelete = document.getElementById(`currentweather-${e.target.id}`);
+    const forecastdelete = document.getElementById(`forecastedcity-${e.target.id}`);
 
-    while(current.children.length > 0) {
-        current.removeChild(current.lastChild);
-    }
+        currentdelete?.remove();
 
-    while(forecast.children.length > 0) {
-        forecast.removeChild(forecast.lastChild);
-    }
+        forecastdelete?.remove();
+
 }
 
-function cityphoto(city){
+
+
+function cityphoto(city, e){
     const clientid = `DcjBH9PjqFwaquQ1Ys--H9e0gFxgbvKtK6tLMJ49L9Y`;
     const photocall = `https://api.unsplash.com/search/photos?&client_id=${clientid}&query=${city}`;
-    
+
     fetch(photocall)
     .then(function(response) {
         return response.json(); 
     })
     .then(function(data) {
-        let photourl = data.results[0].urls.regular;
-        console.log(photourl);
-        let currentweather = document.getElementById(`currentweather-${input.value}`);
 
+        let photourl = data.results[0].urls.regular;
+        let currentweather = document.getElementById(`currentweather-${e.target.id}`);
+        console.log(`${photourl}`);
+        
         currentweather.style.backgroundImage = `url(${photourl})`;
         currentweather.style.backgroundRepeat = `no-repeat`;
         currentweather.style.backgroundSize = `cover`;
@@ -157,11 +172,19 @@ function cityphoto(city){
     })
 }
 
+function insertBefore() {
+    const currentsearch = document.getElementById(`currentweather-btn-search`);
+    const currentcompare = document.getElementById(`currentweather-btn-compare`);
+    const forecastsearch = document.getElementById(`forecastedcity-btn-search`);
+    const forecastcompare = document.getElementById(`forecastedcity-btn-compare`);
+
+    current.insertBefore(currentsearch, currentcompare);
+    forecast.insertBefore(forecastsearch, forecastcompare);
+}
+
 // MAIN FUNCTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getweather(){
-
-    //clearsection()
+function getweather(e){
 
     const city = input.value;
     const geocodingcall = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apikey}`;
@@ -174,9 +197,9 @@ function getweather(){
 
     .then(function(data) {   // do stuff with `data`of the first call, call second `fetch`
 
-        currentcardpart1(data);
+        currentcardpart1(data,e);
 
-        cityphoto(city);
+        cityphoto(city, e);
 
         const lat = data[0].lat;
         const lon = data[0].lon;
@@ -194,18 +217,12 @@ function getweather(){
 
     .then(function(data) { // do stuff with `data` of the second call
 
-        currentcardpart2(data);
+        currentcardpart2(data,e);
 
-        let forecastedcity = document.createElement('div');
-        forecastedcity.setAttribute(`id`,`forecastedcity-${input.value}`);
-        forecast.appendChild(forecastedcity);
+        creatforecastarticles(data,e);
+
+        insertBefore();
         
-        for (let [index, element] of data.daily.entries()) {
-            if (index > 0 && index <= 5) {
-                console.log(index, element);
-                forecastcards(element, data);
-            }
-        }
 
     // LOG FOR CHECKING ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*         for(const element of data.daily){
