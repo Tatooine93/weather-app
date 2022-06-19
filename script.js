@@ -8,7 +8,7 @@ const current = document.getElementById('actual-weather');
 const forecast = document.getElementById('forecast-weather');
 
 
-const apikey = `769117f746b254c905cc5ead9f1384d5`;
+
 
 btnsearch.addEventListener("click", getweather);
 input.addEventListener("keypress", function(e) {
@@ -97,7 +97,7 @@ function clearsection(){
 
 function cityphoto(city){
     const clientid = `DcjBH9PjqFwaquQ1Ys--H9e0gFxgbvKtK6tLMJ49L9Y`;
-    const photocall = `https://api.unsplash.com/search/photos?&client_id=${clientid}&query=${city}`;
+    const photocall = `https://api.unsplash.com/search/photos?&client_id=769117f746b254c905cc5ead9f1384d5&query=${city}`;
     
     fetch(photocall)
     .then(function(response) { 
@@ -119,7 +119,6 @@ function cityphoto(city){
 }
 
 
-
 // MAIN FUNCTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getweather(){
@@ -127,7 +126,7 @@ function getweather(){
     clearsection();
 
     const city = input.value;
-    const geocodingcall = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apikey}`;
+    const geocodingcall = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=769117f746b254c905cc5ead9f1384d5`;
 
     cityphoto(city);
 
