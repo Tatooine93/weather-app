@@ -175,6 +175,7 @@ function insertBefore() {
 }
 
 function chart(data, e) {
+    
     function gethours(element, data){
         new Date(element.dt*1000-(data.timezone_offset*1000)).getDay()
         return new Date(element.dt*1000-(data.timezone_offset*1000)).getHours();
@@ -194,12 +195,12 @@ function chart(data, e) {
     labels: labels,
     datasets: [{
         label: `Temperature ${input.value}`,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgb(0,121,255)',
+        borderColor: 'rgb(0,121,255)',
         data: temp,
-        fill: false,
+        fill: true,
         tension: 0.1,
-        radius: 3,
+        radius: 1,
     }]
     };
 
