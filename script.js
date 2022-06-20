@@ -114,26 +114,19 @@ function currentcardpart2(data,e){ //use second data
 
     let description = document.createElement('p');
     description.innerHTML = `${data.current.weather[0].description}`;
+
+    let chart = document.createElement('canvas');
+    chart.setAttribute('id', `chart-${e.target.id}`);
+    chart.classList.add('chart');
+    chart.classList.add(`${input.value}`);
+
     
     currentweather.appendChild(logo);
     currentweather.appendChild(description);
     currentweather.appendChild(tempcurrent);
+    currentweather.appendChild(chart);
+
 }
-
-/* function clearsection(e){
-    const currentdelete = document.getElementById(`currentweather-${e.target.id}`);
-    const forecastdelete = document.getElementById(`forecastedcity-${e.target.id}`);
-
-    if (document.body.contains(currentdelete)) {
-        console.log(`yes ${currentdelete} exist in the DOM anbd it will be deleted`);
-        currentdelete.remove();
-        } 
-
-    if (document.body.contains(forecastdelete)) {
-        console.log(`yes ${forecastdelete} exist in the DOM anbd it will be deleted`);
-        forecastdelete.remove();
-    }
-} */
 
 function clearsection(e){
     const currentdelete = document.getElementById(`currentweather-${e.target.id}`);
@@ -145,8 +138,6 @@ function clearsection(e){
 
 }
 
-
-
 function cityphoto(city, e){
     const clientid = `DcjBH9PjqFwaquQ1Ys--H9e0gFxgbvKtK6tLMJ49L9Y`;
     const photocall = `https://api.unsplash.com/search/photos?&client_id=${clientid}&query=${city}`;
@@ -156,6 +147,7 @@ function cityphoto(city, e){
         return response.json(); 
     })
     .then(function(data) {
+        console.log(data);
 
         let photourl = data.results[0].urls.regular;
         let currentweather = document.getElementById(`currentweather-${e.target.id}`);
@@ -182,6 +174,64 @@ function insertBefore() {
     forecast.insertBefore(forecastsearch, forecastcompare);
 }
 
+function chart(data, e) {
+    function gethours(element, data){
+        new Date(element.dt*1000-(data.timezone_offset*1000)).getDay()
+        return new Date(element.dt*1000-(data.timezone_offset*1000)).getHours();
+    }
+
+    const labels = [];
+    const temp = [];
+
+    for (let [index, element] of data.hourly.entries()) {
+        if (index <= 24) {
+            labels.push(gethours(element, data));
+            temp.push(element.temp);
+        }
+    }
+
+    const datachart = {
+    labels: labels,
+    datasets: [{
+        label: `Temperature ${input.value}`,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: temp,
+        fill: false,
+        tension: 0.1,
+        radius: 3,
+    }]
+    };
+
+    const config = {
+    type: 'line',
+    data: datachart,
+
+    options: {
+        scales: {
+            x: {
+                display: true,
+                beginAtZero: true,
+            },
+            
+            y: {
+                display: true,
+                beginAtZero: true
+            }
+        },
+    }
+    };
+
+    const chart = new Chart(
+    document.getElementById(`chart-${e.target.id}`),
+    config
+    );
+
+    console.log (labels);
+    console.log (temp);
+
+}
+
 // MAIN FUNCTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function getweather(e){
@@ -203,7 +253,7 @@ function getweather(e){
 
         const lat = data[0].lat;
         const lon = data[0].lon;
-        const apicall = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&lang=en&exclude=minutely,hourly,alerts&appid=${apikey}`;
+        const apicall = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&lang=en&exclude=minutely,alerts&appid=${apikey}`;
 
         // LOG FOR CHECKING ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //console.log(data);
@@ -218,6 +268,8 @@ function getweather(e){
     .then(function(data) { // do stuff with `data` of the second call
 
         currentcardpart2(data,e);
+
+        chart(data, e);
 
         creatforecastarticles(data,e);
 
