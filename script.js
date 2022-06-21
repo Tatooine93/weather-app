@@ -3,9 +3,11 @@ const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 
 const btnsearch = document.getElementById('btn-search');
 const btncompare = document.getElementById('btn-compare');
+const btnclear = document.getElementById('btn-clear');
 
-const current = document.getElementById('current-weather');
-const forecast = document.getElementById('forecast-weather');
+const search = document.getElementById('weather-btn-search');
+const compare = document.getElementById('weather-btn-compare');
+
 
 const apikey = `769117f746b254c905cc5ead9f1384d5`;
 
@@ -31,6 +33,11 @@ btncompare.addEventListener("click", function(e){
     
 });
 
+// LISTENER FOR CLEAR BUTTON
+
+
+
+
 //FUNCTION
 function dayoftheweek(element, data){
     new Date(element.dt*1000-(data.timezone_offset*1000)).getDay()
@@ -38,11 +45,11 @@ function dayoftheweek(element, data){
 }
 
 function creatforecastarticles (data, e) {
-    let forecastedcity = document.createElement('div');
+    let forecastedcity = document.createElement('ul');
     forecastedcity.setAttribute(`id`,`forecastedcity-${e.target.id}`);
     forecastedcity.setAttribute(`class`,`forecast-weather-article`);
     forecastedcity.classList.add(`${input.value}`);
-    forecast.appendChild(forecastedcity);
+    document.getElementById(`weather-${e.target.id}`).appendChild(forecastedcity);
 
     for (let [index, element] of data.daily.entries()) {
         if (index > 0 && index <= 5) {
@@ -56,7 +63,7 @@ function forecastcards(element, data, e){
 
     let forecastedcity = document.getElementById(`forecastedcity-${e.target.id}`);
 
-    let card = document.createElement('article');
+    let card = document.createElement('li');
     card.classList.add(`${input.value}`);
     card.classList.add(`card-${dayoftheweek(element, data)}`);
 
@@ -85,7 +92,7 @@ function forecastcards(element, data, e){
 
 function currentcardpart1(data, e){ // use first data
     
-    let currentweather = document.createElement('article');
+    let currentweather = document.createElement('div');
     currentweather.setAttribute(`id`,`currentweather-${e.target.id}`);
     currentweather.setAttribute(`class`,`current-weather-article`);
     currentweather.classList.add(`${input.value}`);
@@ -96,7 +103,7 @@ function currentcardpart1(data, e){ // use first data
     let countryandstate = document.createElement('p');
     countryandstate.innerHTML = `${data[0].country}, ${data[0].state}`;
     
-    current.appendChild(currentweather);
+    document.getElementById(`weather-${e.target.id}`).appendChild(currentweather);
     currentweather.appendChild(cityname);
     currentweather.appendChild(countryandstate);
 }
@@ -135,7 +142,6 @@ function clearsection(e){
         currentdelete?.remove();
 
         forecastdelete?.remove();
-
 }
 
 function cityphoto(city, e){
@@ -164,7 +170,7 @@ function cityphoto(city, e){
     })
 }
 
-function insertBefore() {
+/* function insertBefore() {
     const currentsearch = document.getElementById(`currentweather-btn-search`);
     const currentcompare = document.getElementById(`currentweather-btn-compare`);
     const forecastsearch = document.getElementById(`forecastedcity-btn-search`);
@@ -172,7 +178,7 @@ function insertBefore() {
 
     current.insertBefore(currentsearch, currentcompare);
     forecast.insertBefore(forecastsearch, forecastcompare);
-}
+} */
 
 function chart(data, e) {
     
@@ -194,7 +200,7 @@ function chart(data, e) {
     const datachart = {
     labels: labels,
     datasets: [{
-        label: `Temperature ${input.value}`,
+        label: `Temperatures/24H ${input.value}`,
         backgroundColor: 'rgb(0,121,255)',
         borderColor: 'rgb(0,121,255)',
         data: temp,
@@ -274,7 +280,7 @@ function getweather(e){
 
         creatforecastarticles(data,e);
 
-        insertBefore();
+        //insertBefore();
         
 
     // LOG FOR CHECKING ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

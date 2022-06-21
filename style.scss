@@ -1,7 +1,14 @@
-body {
+html {
     font-family:'Open Sans', sans-serif;
+}
+
+body {
+
     background: linear-gradient(0deg, rgba(0,121,255,1) 0%, rgba(0,212,255,1) 100%);
     background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
 
     main {
         margin: auto;
@@ -14,13 +21,6 @@ body {
             margin: 0;
         }
 
-/*         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        max-width: 50%;
-        margin: auto;
- */
         header {
             background-color: rgba(255, 255, 255, 0.5);  
             //backdrop-filter: blur(10px);
@@ -28,12 +28,8 @@ body {
             padding: 15px 0 15px 0;
 
             padding: 15px;
-            margin-bottom: 20px;
+            margin: auto auto 20px auto;
             
-
-
-            
-
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -49,9 +45,9 @@ body {
             }
         }
 
-        section#current-weather {
+        section {
 
-            article {
+            div {
 
                 display: flex;
                 flex-direction: column;
@@ -85,11 +81,10 @@ body {
                     margin-top: 20px;
                 }
             }
-        }
-        
-        section#forecast-weather {
 
-            div {
+            ul {
+                list-style-type: none;
+                padding: 0;
 
                 display: flex;
                 flex-direction: row;
@@ -97,7 +92,7 @@ body {
                 margin-bottom: 20px;
                 justify-content: space-between;
                 
-                article {
+                li {
 
                     display: flex;
                     flex-direction: column;
@@ -125,7 +120,6 @@ body {
                     }
                 }
             }
-
         }
     }
 }
