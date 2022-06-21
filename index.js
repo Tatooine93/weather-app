@@ -1,3 +1,5 @@
+import {chart} from './modules/chart.js';
+
 const input = document.getElementById("city");
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -7,7 +9,6 @@ const btnclear = document.getElementById('btn-clear');
 
 const search = document.getElementById('weather-btn-search');
 const compare = document.getElementById('weather-btn-compare');
-
 
 const apikey = `769117f746b254c905cc5ead9f1384d5`;
 
@@ -30,7 +31,6 @@ input.addEventListener("keypress", function(e) {
 btncompare.addEventListener("click", function(e){
     clearsection(e);
     getweather(e);
-    
 });
 
 // LISTENER FOR CLEAR BUTTON
@@ -180,7 +180,7 @@ function cityphoto(city, e){
     forecast.insertBefore(forecastsearch, forecastcompare);
 } */
 
-function chart(data, e) {
+/* function chart(data, e) {
     
     function gethours(element, data){
         new Date(element.dt*1000-(data.timezone_offset*1000)).getDay()
@@ -237,7 +237,7 @@ function chart(data, e) {
     console.log (labels);
     console.log (temp);
 
-}
+} */
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -277,7 +277,7 @@ function getweather(e){
         currentcardpart2(data,e);
 
         chart(data, e);
-
+        
         creatforecastarticles(data,e);
 
         //insertBefore();
