@@ -72,7 +72,7 @@ function forecastcards(element, data, e){
     cardtitle.innerHTML = `${dayoftheweek(element, data)}`;
 
     let cardlogo = document.createElement('img');
-    cardlogo.setAttribute('src', `http://openweathermap.org/img/wn/${element.weather[0].icon}@2x.png`); //changer le weather [] en fonction du jour
+    cardlogo.setAttribute('src', `https://openweathermap.org/img/wn/${element.weather[0].icon}@2x.png`); //changer le weather [] en fonction du jour
     cardlogo.setAttribute('alt', `Weather logo`);
 
     let cardtemp = document.createElement('p');
@@ -113,7 +113,7 @@ function currentcardpart2(data,e){ //use second data
     let currentweather = document.getElementById(`currentweather-${e.target.id}`);
     
     let logo = document.createElement('img');
-    logo.setAttribute('src', `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`);
+    logo.setAttribute('src', `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`);
     logo.setAttribute('alt', `Weather logo`);
 
     let tempcurrent = document.createElement('p');
@@ -244,7 +244,7 @@ function chart(data, e) {
 function getweather(e){
 
     const city = input.value;
-    const geocodingcall = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apikey}`;
+    const geocodingcall = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apikey}`;
 
     fetch(geocodingcall)
 
