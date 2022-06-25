@@ -1,5 +1,6 @@
 const input = document.getElementById("city");
 
+
 export function chart(data, e) {
     
     function gethours(element, data){
